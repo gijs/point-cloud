@@ -1,0 +1,128 @@
+<html>
+  <head>
+  </head>
+
+  <body>
+    <canvas id="canvas" width="320" height="240">
+    </canvas>
+
+    <script type="text/javascript">
+      var canvas = document.getElementById ("canvas"),
+          width = canvas.width,
+          height = canvas.height,
+          ctx = canvas.getContext ("2d"),
+          id = ctx.getImageData (0, 0, width, height),
+          data = id.data,
+          w4 = width << 2,
+          w2 = width << 1,
+          h2 = height << 1,
+          m0 = 1, m1 = 0, m2 = 0, m3 = 0,
+          m4 = 0, m5 = 1, m6 = 0, m7 = 0,
+          m8 = 0, m9 = 0, mA = 1, mB = 0,
+          r0, r1, r2, r3
+
+      function clear () {
+        var i = data.length
+
+        while (i) {
+          data[--i] = 255
+          data[--i] = 0
+          data[--i] = 0
+          data[--i] = 0
+        }
+      }
+
+      function reset () {
+        r0 = 0.76758391689509150
+        r1 = 0.54703062842600050
+        r2 = 0.08701058942824602
+        r3 = 1
+      }
+
+      function random () {
+        var t = 2091639 * r2 + r3 * 2.3283064365386963e-10
+
+        r3 = t | 0
+        r2 = r1
+        r1 = r0
+        return r0 = t - (r3 = t | 0)
+      }
+
+      function apply () {
+        ctx.putImageData (id, 0, 0)
+      }
+
+      function lookAt (ex, ey, ez, cx, cy, cz) {
+        var k
+
+        m8 = cx - ex
+        m9 = cy - ey
+        mA = cz - ez
+
+        k = 1 / Math.sqrt (m8 * m8 + m9 * m9 + mA * mA)
+        m8 *= k
+        m9 *= k
+        mA *= k
+        mB = m8 * ex + m9 * ey + mA * ez
+
+        m0 = mA * -1 - m9 *  0
+        m1 = m8 *  0 - mA *  0
+        m2 = m9 *  0 - m8 * -1
+        m3 = m0 * ex + m1 * ey + m2 * ez
+
+        m4 = mA * m1 - m9 * m2
+        m5 = m8 * m2 - mA * m0
+        m6 = m9 * m0 - m8 * m1
+        m7 = m4 * ex + m5 * ey + m6 * ez
+      }
+
+      function point (x, y, z, rgb) {
+        var u, v, w
+
+        w = w4 / (x * m8 + y * m9 + z * mA - mB)
+
+        u = ((x * m0 + y * m1 + z * m2 - m3) * w + w2) & 0x7ffffffc
+        if (u < 0) return
+
+        v = ((x * m4 + y * m5 + z * m6 - m7) * w + h2) & 0x7ffffffc
+        if (v < 0) return
+
+        w = v * width + u
+
+        data[w++] += (rgb >> 16) & 255
+        data[w++] += (rgb >>  8) & 255
+        data[w++] +=  rgb        & 255
+      }
+
+      function randomPoint () {
+        var x, y, z
+
+        do {
+          x = random () - 0.5
+          y = random () - 0.5
+          z = random () - 0.5
+        } while (x * x + y * y + z * z > 0.25)
+
+        point (x * 2, y * 2, z * 2, random () * 0x1000000)
+      }
+
+      var start = Date.now ()
+
+      setInterval (function () {
+        var millis = Date.now () - start,
+            t = millis * Math.PI / 8000,
+            i = 4096
+
+        clear ()
+        reset ()
+
+        lookAt (Math.cos (t) * 3, -2, Math.sin (t) * 3, 0, 0, 0)
+
+        while (i--)
+          randomPoint ()
+
+        apply ()
+      }, 1000 / 60)
+    </script>
+  </body>
+</html>
