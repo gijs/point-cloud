@@ -70,15 +70,35 @@ function rotateX (angle) {
   )
 }
 
-/*
 function rotateY (angle) {
   var c = Math.cos (angle),
       s = Math.sin (angle),
       m = matrix.length
 
-  apply (c, 0, s, 0, 0, 1, 0, 0, -s, 0, c, 0, 0, 0, 0, 1)
+  matrix.push (
+    matrix[m - 16] * c - matrix[m - 14] * s,
+    matrix[m - 15],
+    matrix[m - 16] * s + matrix[m - 14] * c,
+    matrix[m - 13],
+
+    matrix[m - 12] * c - matrix[m - 10] * s,
+    matrix[m - 11],
+    matrix[m - 12] * s + matrix[m - 10] * c,
+    matrix[m -  9],
+
+    matrix[m -  8] * c - matrix[m -  6] * s,
+    matrix[m -  7],
+    matrix[m -  8] * s + matrix[m -  6] * c,
+    matrix[m -  5],
+
+    matrix[m -  4] * c - matrix[m -  2] * s,
+    matrix[m -  3],
+    matrix[m -  4] * s + matrix[m -  2] * c,
+    matrix[m -  1]
+  )
 }
 
+/*
 function rotateZ (angle) {
   var c = Math.cos (angle),
       s = Math.sin (angle),
