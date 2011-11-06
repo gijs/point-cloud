@@ -6,6 +6,8 @@
     <canvas id="canvas" width="640" height="360" style="background: black;">
     </canvas>
 
+    <script type="text/javascript" src="matrix.js"></script>
+
     <script type="text/javascript">
       var canvas = document.getElementById ("canvas"),
           width = canvas.width,
@@ -17,9 +19,6 @@
           w2 = width << 1,
           h4 = height << 2,
           h2 = height << 1,
-          m0 = 1, m1 = 0, m2 = 0, m3 = 0,
-          m4 = 0, m5 = 1, m6 = 0, m7 = 0,
-          m8 = 0, m9 = 0, mA = 1, mB = 0,
           r0, r1, r2, r3
 
       function clear () {
@@ -51,39 +50,20 @@
         return r0 = t - (r3 = t | 0)
       }
 
-      function lookAt (ex, ey, ez, cx, cy, cz) {
-        var k
-
-        m8 = cx - ex
-        m9 = cy - ey
-        mA = cz - ez
-
-        k = 1 / Math.sqrt (m8 * m8 + m9 * m9 + mA * mA)
-        m8 *= k
-        m9 *= k
-        mA *= k
-        mB = m8 * ex + m9 * ey + mA * ez
-
-        m0 = mA * -1 - m9 *  0
-        m1 = m8 *  0 - mA *  0
-        m2 = m9 *  0 - m8 * -1
-        m3 = m0 * ex + m1 * ey + m2 * ez
-
-        m4 = mA * m1 - m9 * m2
-        m5 = m8 * m2 - mA * m0
-        m6 = m9 * m0 - m8 * m1
-        m7 = m4 * ex + m5 * ey + m6 * ez
-      }
-
       function point (x, y, z, rgb) {
-        var u, v, w
+        var m = matrix.length - 8,
+            u, v, w
 
-        w = w4 / (x * m8 + y * m9 + z * mA - mB)
+        w = x * matrix[m++] + y * matrix[m++] + z * matrix[m++] + matrix[m++]
+        if (w < 1) return
 
-        u = ((x * m0 + y * m1 + z * m2 - m3) * w + w2) & 0x7ffffffc
+        w = w4 / w
+        m -= 12
+
+        u = ((x * matrix[m++] + y * matrix[m++] + z * matrix[m++] + matrix[m++]) * w + w2) & 0x7ffffffc
         if (u > w4) return
 
-        v = ((x * m4 + y * m5 + z * m6 - m7) * w + h2) & 0x7ffffffc
+        v = ((x * matrix[m++] + y * matrix[m++] + z * matrix[m++] + matrix[m++]) * w + h2) & 0x7ffffffc
         if (v > h4) return
 
         w = v * width + u + 3
@@ -107,12 +87,9 @@
 
         do {
           x = random () - 0.5
-          y = random () - 0.5
+          y = random () * -0.5
           z = random () - 0.5
         } while (x * x + y * y + z * z > 0.25)
-
-        if (y < 0)
-          y = -y
 
         point (x * 2048, y * 2048, z * 2048, random () * 0x1000000 & 0xbf7fbf)
       }
@@ -154,9 +131,9 @@
             t = millis * Math.PI / 8000,
             i
 
-        clear ()
         reset ()
-        lookAt (Math.cos (t) * 2, -2, Math.sin (t) * 2, 0, 0, 0)
+        clear ()
+        camera (Math.cos (t) * 2, 2, Math.sin (t) * 2, 0, 0, 0, 0, 1, 0)
 
         i = 2048; while (i--) star ()
         i = 4096; while (i--) spiralArm ()
