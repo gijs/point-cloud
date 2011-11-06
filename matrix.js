@@ -42,24 +42,47 @@ function camera (ex, ey, ez, cx, cy, cz, ux, uy, uz) {
   )
 }
 
-/*
 function rotateX (angle) {
   var c = Math.cos (angle),
-      s = Math.sin (angle)
+      s = Math.sin (angle),
+      m = matrix.length
 
-  apply (1, 0, 0, 0, 0, c, -s, 0, 0, s, c, 0, 0, 0, 0, 1)
+  matrix.push (
+    matrix[m - 16],
+    matrix[m - 15] * c + matrix[m - 15] * s,
+    matrix[m - 14] * c - matrix[m - 15] * s,
+    matrix[m - 13],
+
+    matrix[m - 12],
+    matrix[m - 11] * c + matrix[m - 10] * s,
+    matrix[m - 10] * c - matrix[m - 11] * s,
+    matrix[m -  9],
+
+    matrix[m -  8],
+    matrix[m -  7] * c + matrix[m -  6] * s,
+    matrix[m -  6] * c - matrix[m -  7] * s,
+    matrix[m -  5],
+
+    matrix[m -  4],
+    matrix[m -  3] * c + matrix[m -  2] * s,
+    matrix[m -  2] * c - matrix[m -  3] * s,
+    matrix[m -  1]
+  )
 }
 
+/*
 function rotateY (angle) {
   var c = Math.cos (angle),
-      s = Math.sin (angle)
+      s = Math.sin (angle),
+      m = matrix.length
 
   apply (c, 0, s, 0, 0, 1, 0, 0, -s, 0, c, 0, 0, 0, 0, 1)
 }
 
 function rotateZ (angle) {
   var c = Math.cos (angle),
-      s = Math.sin (angle)
+      s = Math.sin (angle),
+      m = matrix.length
 
   apply (c, -s, 0, 0, s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
 }
