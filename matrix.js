@@ -42,6 +42,32 @@ function camera (ex, ey, ez, cx, cy, cz, ux, uy, uz) {
   )
 }
 
+function translate (x, y, z) {
+  var m = matrix.length
+
+  matrix.push (
+    matrix[m - 16],
+    matrix[m - 15],
+    matrix[m - 14],
+    matrix[m - 16] * x + matrix[m - 15] * y + matrix[m - 14] * z + matrix[m - 13],
+
+    matrix[m - 12],
+    matrix[m - 11],
+    matrix[m - 10],
+    matrix[m - 12] * x + matrix[m - 11] * y + matrix[m - 10] * z + matrix[m -  9],
+
+    matrix[m -  8],
+    matrix[m -  7],
+    matrix[m -  6],
+    matrix[m -  8] * x + matrix[m -  7] * y + matrix[m -  6] * z + matrix[m -  5],
+
+    matrix[m -  4],
+    matrix[m -  3],
+    matrix[m -  2],
+    matrix[m -  4] * x + matrix[m -  3] * y + matrix[m -  2] * z + matrix[m -  1]
+  )
+}
+
 function rotateX (angle) {
   var c = Math.cos (angle),
       s = Math.sin (angle),
