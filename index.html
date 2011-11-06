@@ -3,7 +3,7 @@
   </head>
 
   <body>
-    <canvas id="canvas" width="320" height="240">
+    <canvas id="canvas" width="640" height="360" style="background: black;">
     </canvas>
 
     <script type="text/javascript">
@@ -26,8 +26,8 @@
         var i = data.length
 
         while (i) {
-          data[--i] = 255
-          data[--i] = data[--i] = data[--i] = 0
+          data[--i] = 0
+          i -= 3
         }
       }
 
@@ -86,11 +86,20 @@
         v = ((x * m4 + y * m5 + z * m6 - m7) * w + h2) & 0x7ffffffc
         if (v > h4) return
 
-        w = v * width + u
+        w = v * width + u + 3
 
-        data[w++] += (rgb >> 16) & 255
-        data[w++] += (rgb >>  8) & 255
-        data[w++] +=  rgb        & 255
+        if (data[w]) {
+          data[--w] += rgb & 255
+          data[--w] += (rgb >> 8) & 255
+          data[--w] += (rgb >> 16) & 255
+        }
+
+        else {
+          data[  w] = 255
+          data[--w] = rgb & 255
+          data[--w] = (rgb >> 8) & 255
+          data[--w] = (rgb >> 16) & 255
+        }
       }
 
       function star () {
