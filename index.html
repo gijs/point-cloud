@@ -119,9 +119,9 @@
         clear ()
         camera (Math.cos (t) * 2, 2, Math.sin (t) * 2, 0, 0, 0, 0, 1, 0)
 
-        i = 2048; while (i--) star ()
-        i = 4096; while (i--) spiralArm ()
-        i = 8192; while (i--) cloud ()
+        i =  4096; while (i--) star ()
+        i =  8192; while (i--) spiralArm ()
+        i = 16384; while (i--) cloud ()
 
         apply ()
       }, 1000 / 60)
