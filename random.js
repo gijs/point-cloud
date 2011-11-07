@@ -15,5 +15,3 @@ function random () {
   r1 = r0
   return r0 = t - (r3 = t | 0)
 }
-
-reset ()
