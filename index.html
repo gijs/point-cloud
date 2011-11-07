@@ -66,62 +66,86 @@
         }
       }
 
-      function star () {
-        var x, y, z
-
-        do {
-          x = random () - 0.5
-          y = random () * -0.5
-          z = random () - 0.5
-        } while (x * x + y * y + z * z > 0.25)
-
-        point (x * 2048, y * 2048, z * 2048, random () * 0x1000000 & 0xbf7fbf)
-      }
-
-      function spiralArm () {
-        var d = random () * random (),
-            a = (d * d + Math.floor (random () * 5) * 0.4) * Math.PI,
-            k = 0.125 / (1 + d),
+      function sphere (ox, oy, oz, or, color) {
+        var i = 128,
             x, y, z
 
-        do {
-          x = random () - 0.5
-          y = random () - 0.5
-          z = random () - 0.5
-        } while (x * x + y * y + z * z > 0.25)
+        while (i--) {
+          do {
+            x = random () - 0.5
+            y = random () - 0.5
+            z = random () - 0.5
+          } while (x * x + y * y + z * z > 0.25)
 
-        point (
-          x * k + Math.cos (a) * d, y * k, z * k + Math.sin (a) * d,
-          random () * 0x1000000 & (random () > d ? 0x7f3f3f : 0x5f5fef))
+          point (ox + x * or, oy + y * or, ox + z * or, color)
+        }
       }
 
-      function cloud () {
-        var d = 2 * random () * random (),
-            x, y, z
+      function line (x1, y1, z1, x2, y2, z2, color) {
+        var i = 64,
+            t
 
-        do {
-          x = random () - 0.5
-          y = random () - 0.5
-          z = random () - 0.5
-        } while (x * x + y * y + z * z > 0.25)
+        x2 -= x1
+        y2 -= y1
+        z2 -= z1
 
-        point (x * d, y * d * 0.125, z * d, random () * 0x1000000 & 0x6f3f6f)
+        while (i--) {
+          t = random ()
+          point (x1 + x2 * t, y1 + y2 * t, z1 + z2 * t, color)
+        }
+      }
+
+      function person () {
+        var ax =  0.000, ay = 1.000, az = 0,
+            bx =  0.000, by = 0.833, bz = 0,
+            cx = -0.125, cy = 0.833, cz = 0,
+            dx = -0.250, dy = 0.833, dz = 0,
+            ex = -0.500, ey = 0.833, ez = 0,
+            fx =  0.125, fy = 0.833, fz = 0,
+            gx =  0.250, gy = 0.833, gz = 0,
+            hx =  0.500, hy = 0.833, hz = 0,
+            ix = -0.125, iy = 0.500, iz = 0,
+            jx = -0.125, jy = 0.250, jz = 0,
+            kx = -0.125, ky = 0.000, kz = 0,
+            lx =  0.125, ly = 0.500, lz = 0,
+            mx =  0.125, my = 0.250, mz = 0,
+            nx =  0.125, ny = 0.000, nz = 0
+
+        line (ax, ay, az, bx, by, bz, 0xffff00)
+
+        line (bx, by, bz, cx, cy, cz, 0xffff00)
+        line (bx, by, bz, fx, fy, fz, 0xffff00)
+        line (cx, cy, cz, ix, iy, iz, 0xffff00)
+        line (fx, fy, fz, lx, ly, lz, 0xffff00)
+        line (ix, iy, iz, lx, ly, lz, 0xffff00)
+
+        line (cx, cy, cz, dx, dy, dz, 0xffff00)
+        line (dx, dy, dz, ex, ey, ez, 0xffff00)
+
+        line (fx, fy, fz, gx, gy, gz, 0xffff00)
+        line (gx, gy, gz, hx, hy, hz, 0xffff00)
+
+        line (ix, iy, iz, jx, jy, jz, 0xffff00)
+        line (jx, jy, jz, kx, ky, kz, 0xffff00)
+
+        line (lx, ly, lz, mx, my, mz, 0xffff00)
+        line (mx, my, mz, nx, ny, nz, 0xffff00)
+
+        sphere (ax, ay, az, 0.125, 0x0000ff)
       }
 
       var start = Date.now ()
 
+      reset ()
+
       setInterval (function () {
         var millis = Date.now () - start,
-            t = millis * Math.PI / 8000,
-            i
+            t = millis * Math.PI / 8000
 
-        reset ()
         clear ()
-        camera (Math.cos (t) * 2, 2, Math.sin (t) * 2, 0, 0, 0, 0, 1, 0)
+        camera (Math.cos (t) * 4, 4.5, Math.sin (t) * 4, 0, 0.5, 0, 0, 1, 0)
 
-        i =  4096; while (i--) star ()
-        i =  8192; while (i--) spiralArm ()
-        i = 16384; while (i--) cloud ()
+        person ()
 
         apply ()
       }, 1000 / 60)
