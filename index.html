@@ -7,6 +7,7 @@
     </canvas>
 
     <script type="text/javascript" src="matrix.js"></script>
+    <script type="text/javascript" src="random.js"></script>
 
     <script type="text/javascript">
       var canvas = document.getElementById ("canvas"),
@@ -18,8 +19,7 @@
           w4 = width << 2,
           w2 = width << 1,
           h4 = height << 2,
-          h2 = height << 1,
-          r0, r1, r2, r3
+          h2 = height << 1
 
       function clear () {
         var i = data.length
@@ -32,22 +32,6 @@
 
       function apply () {
         ctx.putImageData (id, 0, 0)
-      }
-
-      function reset () {
-        r0 = 0.76758391689509150
-        r1 = 0.54703062842600050
-        r2 = 0.08701058942824602
-        r3 = 1
-      }
-
-      function random () {
-        var t = 2091639 * r2 + r3 * 2.3283064365386963e-10
-
-        r3 = t | 0
-        r2 = r1
-        r1 = r0
-        return r0 = t - (r3 = t | 0)
       }
 
       function point (x, y, z, rgb) {
