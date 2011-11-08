@@ -95,6 +95,10 @@
         }
       }
 
+      /* TODO: Let's get a basic animation working first, like walking. Once we
+       * have that, we can start to work out a proper rendering system. Finding
+       * the direction vector is easy enough (we can assume it's +z), so it
+       * shouldn't be too hard to place metaballs as necessary... */
       function person () {
         var ax =  0.000, ay = 1.000, az = 0,
             bx =  0.000, by = 0.833, bz = 0,
@@ -130,32 +134,6 @@
 
         line (lx, ly, lz, mx, my, mz, 0xffff00)
         line (mx, my, mz, nx, ny, nz, 0xffff00)
-
-        /* Fill the bounding box with noise. This is gross for now, we'll need
-         * some sort of rejection method to only fill the space filled with the
-         * character. */
-        var minx = Math.min (ax, bx, cx, dx, ex, fx, gx, hx, ix, jx, kx, lx, mx, nx),
-            maxx = Math.max (ax, bx, cx, dx, ex, fx, gx, hx, ix, jx, kx, lx, mx, nx),
-            miny = Math.min (ay, by, cy, dy, ey, fy, gy, hy, iy, jy, ky, ly, my, ny),
-            maxy = Math.max (ay, by, cy, dy, ey, fy, gy, hy, iy, jy, ky, ly, my, ny),
-            maxz = Math.max (az, bz, cz, dz, ez, fz, gz, hz, iz, jz, kz, lz, mz, nz),
-            minz = Math.min (az, bz, cz, dz, ez, fz, gz, hz, iz, jz, kz, lz, mz, nz),
-            i = 8192
-
-        minx -= 0.0625
-        maxx += 0.0625
-        miny -= 0.0625
-        maxy += 0.0625
-        minz -= 0.0625
-        maxz += 0.0625
-
-        while (i--)
-          point (
-            minx + (maxx - minx) * Math.random (),
-            miny + (maxy - miny) * Math.random (),
-            minz + (maxz - minz) * Math.random (),
-            Math.random () * 0x1000000 & 0x3f1f7f
-          )
       }
 
       var start = Date.now ()
