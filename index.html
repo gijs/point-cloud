@@ -3,7 +3,7 @@
   </head>
 
   <body>
-    <canvas id="canvas" width="640" height="360" style="background: black;">
+    <canvas id="canvas" width="320" height="240" style="background: black; width: 640px; height: 480px;">
     </canvas>
 
     <script type="text/javascript" src="matrix.js"></script>
@@ -131,7 +131,31 @@
         line (lx, ly, lz, mx, my, mz, 0xffff00)
         line (mx, my, mz, nx, ny, nz, 0xffff00)
 
-        sphere (ax, ay, az, 0.125, 0x0000ff)
+        /* Fill the bounding box with noise. This is gross for now, we'll need
+         * some sort of rejection method to only fill the space filled with the
+         * character. */
+        var minx = Math.min (ax, bx, cx, dx, ex, fx, gx, hx, ix, jx, kx, lx, mx, nx),
+            maxx = Math.max (ax, bx, cx, dx, ex, fx, gx, hx, ix, jx, kx, lx, mx, nx),
+            miny = Math.min (ay, by, cy, dy, ey, fy, gy, hy, iy, jy, ky, ly, my, ny),
+            maxy = Math.max (ay, by, cy, dy, ey, fy, gy, hy, iy, jy, ky, ly, my, ny),
+            maxz = Math.max (az, bz, cz, dz, ez, fz, gz, hz, iz, jz, kz, lz, mz, nz),
+            minz = Math.min (az, bz, cz, dz, ez, fz, gz, hz, iz, jz, kz, lz, mz, nz),
+            i = 8192
+
+        minx -= 0.0625
+        maxx += 0.0625
+        miny -= 0.0625
+        maxy += 0.0625
+        minz -= 0.0625
+        maxz += 0.0625
+
+        while (i--)
+          point (
+            minx + (maxx - minx) * Math.random (),
+            miny + (maxy - miny) * Math.random (),
+            minz + (maxz - minz) * Math.random (),
+            Math.random () * 0x1000000 & 0x3f1f7f
+          )
       }
 
       var start = Date.now ()
@@ -143,7 +167,7 @@
             t = millis * Math.PI / 8000
 
         clear ()
-        camera (Math.cos (t) * 4, 4.5, Math.sin (t) * 4, 0, 0.5, 0, 0, 1, 0)
+        camera (Math.cos (t) * 2, 2.5, Math.sin (t) * 2, 0, 0.5, 0, 0, 1, 0)
 
         person ()
 
