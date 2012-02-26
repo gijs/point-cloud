@@ -56,11 +56,8 @@
               })
 
               rotateY (millis * twoPi / 15000, function () {
+                occlude (1, 0, 0, 0)
                 plot (sphere)
-
-                scale (1 + Math.sin (millis * twoPi / 1000) * 0.5, function () {
-                  plot (sphere)
-                })
               })
             })
           })

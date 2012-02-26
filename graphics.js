@@ -168,5 +168,12 @@ function circle (r, x, y) {
 }
 
 function occlude (w, x, y, z) {
-  /* FIXME */
+  var c = x * zx + y * zy + z * zz + zo
+  if (c <= 0) return
+  c = width / c
+
+  var a = (x * xx + y * xy + z * xz + xo) * c + width * 0.5,
+      b = (x * yx + y * yy + z * yz + yo) * c + height * 0.5
+
+  circle (w * c, a, b)
 }
