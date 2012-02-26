@@ -2,7 +2,20 @@
 
 var xx = 1, xy = 0, xz = 0, xo = 0,
     yx = 0, yy = 1, yz = 0, yo = 0,
-    zx = 0, zy = 0, zz = 1, zo = 0
+    zx = 0, zy = 0, zz = 1, zo = 0,
+    width, width2, width4, height, height2, height4, ctx, id, data
+
+function initialize (canvas) {
+  width = canvas.width
+  width2 = width + width
+  width4 = width2 + width2
+  height = canvas.height
+  height2 = height + height
+  height4 = height2 + height2
+  ctx = canvas.getContext ("2d")
+  id = ctx.getImageData (0, 0, width, height)
+  data = id.data
+}
 
 function translate (x, y, z, block) {
   var _xo = xo,
@@ -79,4 +92,39 @@ function scale (x, y, z, block) {
   xz /= z
   yz /= z
   zz /= z
+}
+
+function frame (block) {
+  var i = data.length
+
+  while (i) {
+    data[--i] = 0
+    i -= 3
+  }
+
+  block ()
+
+  ctx.putImageData (id, 0, 0)
+}
+
+function plot (points) {
+  var i = points.length,
+      x, y, z, w, u, v
+
+  while (i) {
+    z = points[--i]
+    y = points[--i]
+    x = points[--i]
+    w = x * zx + y * zy + z * zz + zo
+    if (w < 1) continue
+    w = width4 / w
+
+    u = ((x * xx + y * xy + z * xz + xo) * w + width2) & 0x7ffffffc
+    if (u >= width4) continue
+
+    v = ((x * yx + y * yy + z * yz + yo) * w + height2) & 0x7ffffffc
+    if (v >= height4) continue
+
+    data[v * width + u + 3] = 255
+  }
 }
