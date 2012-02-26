@@ -6,59 +6,30 @@
     <canvas id="canvas" width="640" height="480"></canvas>
 
     <script type="text/javascript" src="graphics.js"></script>
+    <script type="text/javascript" src="models.js"></script>
     <script type="text/javascript">
       "use strict"
 
-      function shell (arr) {
-        var i = arr.length,
-            x, y, z, k
-
-        while (i) {
-          do {
-            x = Math.random () - 0.5
-            y = Math.random () - 0.5
-            z = Math.random () - 0.5
-            k = x * x + y * y + z * z
-          } while (k > 0.25)
-
-          k = 1 / Math.sqrt (k)
-
-          arr[--i] = z * k
-          arr[--i] = y * k
-          arr[--i] = x * k
-        }
-      }
-
       var start = Date.now (),
-          twoPi = 2 * Math.PI,
-          sphere = new Float32Array (8192 * 3)
+          stars = new Float32Array (8192 * 6),
+          planet = new Float32Array (8192 * 6)
 
-      shell (sphere)
       initialize (document.getElementById ("canvas"))
+      cube (stars)
+      sphere (planet)
 
       setInterval (function () {
         var millis = Date.now () - start
 
         frame (function () {
-          translate (0, 0, 4, function () {
-            rotateY (millis * twoPi / 600000, function () {
-              scale (65536, function () {
-                /* How do you make 8192 points look like 65536? You flip them
-                 * every which way! */
-                plot (sphere)
-                scale (-1, 1, 1, function () { plot (sphere) })
-                scale (1, -1, 1, function () { plot (sphere) })
-                scale (-1, -1, 1, function () { plot (sphere) })
-                scale (1, 1, -1, function () { plot (sphere) })
-                scale (-1, 1, -1, function () { plot (sphere) })
-                scale (1, -1, -1, function () { plot (sphere) })
-                scale (-1, -1, -1, function () { plot (sphere) })
-              })
+          translate (0, 0, 6, function () {
+            scale (4, function () {
+              plot (stars)
+            })
 
-              rotateY (millis * twoPi / 15000, function () {
-                occlude (1, 0, 0, 0)
-                plot (sphere)
-              })
+            rotateY (millis * Math.PI * 2 / 15000, function () {
+              occlude (1.03125, 0, 0, 0)
+              plot (planet)
             })
           })
         })

@@ -115,6 +115,13 @@ function plot (points) {
     z = points[--i]
     y = points[--i]
     x = points[--i]
+
+    if (x * zx + y * zy + z * zz >= 0)
+      continue
+
+    z = points[--i]
+    y = points[--i]
+    x = points[--i]
     w = x * zx + y * zy + z * zz + zo
     if (w < 1) continue
     w = width4 / w
