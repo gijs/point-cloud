@@ -128,3 +128,45 @@ function plot (points) {
     data[v * width + u + 3] = 255
   }
 }
+
+function circle (r, x, y) {
+  var left = Math.floor (x - r),
+      top = Math.floor (y - r),
+      right = Math.floor (x + r + 1),
+      bottom = Math.floor (y + r + 1)
+
+  if (left < 0) left = 0
+  else if (left >= width) return
+
+  if (top < 0) top = 0
+  else if (top >= height) return
+
+  if (right > width) right = width
+  else if (right < 0) return
+
+  if (bottom > height) bottom = height
+  else if (bottom < 0) return
+
+  var i = (top * width + left) * 4 + 3,
+      step = (width + left - right) * 4
+
+  r *= r
+
+  left -= x
+  top -= y
+  right -= x
+  bottom -= y
+
+  for (y = top; y !== bottom; y++, i += step) {
+    for (x = left; x !== right; x++, i += 4) {
+      if (x * x + y * y > r)
+        continue
+
+      data[i] = 0
+    }
+  }
+}
+
+function occlude (w, x, y, z) {
+  /* FIXME */
+}
