@@ -4,7 +4,7 @@ var xx = 1, xy = 0, xz = 0, xo = 0,
 
 function translate (x, y, z, block) {
   var _xo = xo,
-      _yo = yo
+      _yo = yo,
       _zo = zo
 
   xo += xx * x + xy * y + xz * z
