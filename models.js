@@ -2,9 +2,6 @@ function cube (arr) {
   var i = arr.length
 
   while (i) {
-    arr[--i] = -1
-    arr[--i] = 0
-    arr[--i] = 0
     arr[--i] = Math.random () * 2 - 1
     arr[--i] = Math.random () * 2 - 1
     arr[--i] = Math.random () * 2 - 1
@@ -24,15 +21,9 @@ function sphere (arr) {
     } while (k > 0.25)
 
     k = 1 / Math.sqrt (k)
-    x *= k
-    y *= k
-    z *= k
 
-    arr[--i] = z
-    arr[--i] = y
-    arr[--i] = x
-    arr[--i] = z
-    arr[--i] = y
-    arr[--i] = x
+    arr[--i] = z * k
+    arr[--i] = y * k
+    arr[--i] = x * k
   }
 }

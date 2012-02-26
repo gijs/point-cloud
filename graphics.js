@@ -115,13 +115,6 @@ function plot (points) {
     z = points[--i]
     y = points[--i]
     x = points[--i]
-
-    if (x * zx + y * zy + z * zz >= 0)
-      continue
-
-    z = points[--i]
-    y = points[--i]
-    x = points[--i]
     w = x * zx + y * zy + z * zz + zo
     if (w < 1) continue
     w = width4 / w
@@ -174,6 +167,7 @@ function circle (r, x, y) {
   }
 }
 
+/* FIXME: This should only occlude points greater than the distance away. */
 function occlude (w, x, y, z) {
   var c = x * zx + y * zy + z * zz + zo
   if (c <= 0) return
