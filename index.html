@@ -55,7 +55,7 @@
         }
       }
 
-      function shell (arr, r) {
+      function shell (arr) {
         var i = arr.length,
             x, y, z, k
 
@@ -67,7 +67,7 @@
             k = x * x + y * y + z * z
           } while (k > 0.25)
 
-          k = r / Math.sqrt (k)
+          k = 1 / Math.sqrt (k)
 
           arr[--i] = z * k
           arr[--i] = y * k
@@ -77,25 +77,34 @@
 
       var start = Date.now (),
           twoPi = 2 * Math.PI,
-          space = new Float32Array (65536 * 3),
-          planet = new Float32Array (8192 * 3)
+          sphere = new Float32Array (8192 * 3)
 
-      shell (space, 65536)
-      shell (planet, 1)
+      shell (sphere)
 
       setInterval (function () {
         var millis = Date.now () - start
 
         frame (function () {
           translate (0, 0, 4, function () {
-            rotateY (millis * twoPi / 300000, function () {
-              plot (space)
+            rotateY (millis * twoPi / 600000, function () {
+              scale (65536, function () {
+                /* How do you make 8192 points look like 65536? You flip them
+                 * every which way! */
+                plot (sphere)
+                scale (-1, 1, 1, function () { plot (sphere) })
+                scale (1, -1, 1, function () { plot (sphere) })
+                scale (-1, -1, 1, function () { plot (sphere) })
+                scale (1, 1, -1, function () { plot (sphere) })
+                scale (-1, 1, -1, function () { plot (sphere) })
+                scale (1, -1, -1, function () { plot (sphere) })
+                scale (-1, -1, -1, function () { plot (sphere) })
+              })
 
               rotateY (millis * twoPi / 15000, function () {
-                plot (planet)
+                plot (sphere)
 
                 scale (1 + (millis / 1000) % 1, function () {
-                  plot (planet)
+                  plot (sphere)
                 })
               })
             })
