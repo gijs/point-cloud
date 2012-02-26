@@ -1,3 +1,5 @@
+"use strict"
+
 var xx = 1, xy = 0, xz = 0, xo = 0,
     yx = 0, yy = 1, yz = 0, yo = 0,
     zx = 0, zy = 0, zz = 1, zo = 0
