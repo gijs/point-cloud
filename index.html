@@ -93,6 +93,10 @@
 
               rotateY (millis * twoPi / 15000, function () {
                 plot (planet)
+
+                scale (1 + (millis / 1000) % 1, function () {
+                  plot (planet)
+                })
               })
             })
           })
