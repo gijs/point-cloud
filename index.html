@@ -11,12 +11,11 @@
       "use strict"
 
       var start = Date.now (),
-          stars = new Float32Array (8192 * 3),
-          planet = new Float32Array (8192 * 3)
+          stars = denseCube (8192),
+          planet = sparseSphere (8192),
+          text = denseText ("42")
 
       initialize (document.getElementById ("canvas"))
-      cube (stars)
-      sphere (planet)
 
       setInterval (function () {
         var millis = Date.now () - start
@@ -30,10 +29,13 @@
             rotateY (millis * Math.PI * 2 / 15000, function () {
               occlude (1.03125, 0, 0, 0)
               plot (planet)
+              plot (text)
             })
           })
         })
       }, 1000 / 60)
+
+      text ("42")
     </script>
   </body>
 </html>
