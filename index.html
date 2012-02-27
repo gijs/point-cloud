@@ -10,32 +10,31 @@
     <script type="text/javascript">
       "use strict"
 
+      /* FIXME: If we sort and render the points back-to-front, and put a giant
+       * point in the center of the planet, then we get occlusion! */
+
       var start = Date.now (),
-          stars = denseCube (8192),
-          planet = sparseSphere (8192),
-          text = denseText ("42")
+          stars = denseSphere (4096, 4),
+          planet = sparseSphere (4096, 1)
 
       initialize (document.getElementById ("canvas"))
 
       setInterval (function () {
-        var millis = Date.now () - start
+        var now = Date.now (),
+            millis = now - start
 
         frame (function () {
           translate (0, 0, 6, function () {
-            scale (4, function () {
+            rotateY (millis * Math.PI * 2 / 300000, function () {
               plot (stars)
-            })
 
-            rotateY (millis * Math.PI * 2 / 15000, function () {
-              occlude (1.03125, 0, 0, 0)
-              plot (planet)
-              plot (text)
+              rotateY (millis * Math.PI * 2 / 15000, function () {
+                plot (planet)
+              })
             })
           })
         })
       }, 1000 / 60)
-
-      text ("42")
     </script>
   </body>
 </html>
