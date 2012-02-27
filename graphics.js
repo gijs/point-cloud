@@ -109,19 +109,18 @@ function circle (x, y, r) {
 
 function plot (points) {
   var i = points.length,
-      r, x, y, z, w, u, v, p
+      p, z
 
-  while (i) {
-    z = points[--i]
-    y = points[--i]
-    x = points[--i]
-    r = points[--i]
-    w = x * zx + y * zy + z * zz + zo
-    if (w <= 0) continue
-    p = width / w
-    v = x * yx + y * yy + z * yz + yo
-    u = x * xx + y * xy + z * xz + xo
+  while (i--) {
+    p = points[i]
+    z = p.x * zx + p.y * zy + p.z * zz + zo
+    if (z <= 0) continue
+    z = width / z
 
-    circle (u * p + width * 0.5, v * p + height * 0.5, r * p)
+    circle (
+      (p.x * xx + p.y * xy + p.z * xz + xo) * z + width * 0.5,
+      (p.x * yx + p.y * yy + p.z * yz + yo) * z + height * 0.5,
+      p.radius * z
+    )
   }
 }

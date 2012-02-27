@@ -1,43 +1,39 @@
 function sparseSphere (i, r) {
   var arr = denseSphere (i, r),
-      x, y, z, k
+      p, k
 
-  i = arr.length
-
-  while (i) {
-    z = arr[i - 1]
-    y = arr[i - 2]
-    x = arr[i - 3]
-    k = 1 / Math.sqrt (x * x + y * y + z * z)
-
-    arr[--i] *= k
-    arr[--i] *= k
-    arr[--i] *= k
-    arr[--i] *= 4
+  while (i--) {
+    p = arr[i]
+    k = 1 / Math.sqrt (p.x * p.x + p.y * p.y + p.z * p.z)
+    p.x *= k
+    p.y *= k
+    p.z *= k
+    p.radius *= 4
   }
 
   return arr
 }
 
 function denseSphere (i, r) {
-  i *= 4
   r += r
 
-  var arr = new Float32Array (i),
-      s = r * 16 / i,
+  var arr = new Array (i),
+      s = r * 4 / i,
       x, y, z
 
-  while (i) {
+  while (i--) {
     do {
       x = Math.random () - 0.5
       y = Math.random () - 0.5
       z = Math.random () - 0.5
     } while (x * x + y * y + z * z > 0.25)
 
-    arr[--i] = z * r
-    arr[--i] = y * r
-    arr[--i] = x * r
-    arr[--i] = s
+    arr[i] = {
+      x: x * r,
+      y: y * r,
+      z: z * r,
+      radius: s
+    }
   }
 
   return arr
