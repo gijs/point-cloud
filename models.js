@@ -38,6 +38,9 @@ function denseSphere (i, r, c) {
       x: x * r,
       y: y * r,
       z: z * r,
+      u: 0,
+      v: 0,
+      w: 0,
       radius: s,
       color: c
     }

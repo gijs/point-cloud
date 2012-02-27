@@ -3,11 +3,13 @@
 var xx = 1, xy = 0, xz = 0, xo = 0,
     yx = 0, yy = 1, yz = 0, yo = 0,
     zx = 0, zy = 0, zz = 1, zo = 0,
-    width, height, ctx, id, data, cache
+    width, halfWidth, height, halfHeight, ctx, id, data, cache
 
 function initialize (canvas) {
   width = canvas.width
+  halfWidth = width * 0.5
   height = canvas.height
+  halfHeight = height * 0.5
   ctx = canvas.getContext ("2d")
   id = ctx.getImageData (0, 0, width, height)
   data = id.data
@@ -79,10 +81,17 @@ function frame (block) {
   i = cache.length
   while (i--) {
     p = cache[i]
+
+    /* Don't draw anything behind the camera. (This is a break instead of a
+     * continue, since the array is sorted. If we encounter one point behind
+     * the camera, then the rest of the array will be as well.) */
+    if (p.w <= 0)
+      break
+
     z = width / p.w
     circle (
-      p.u * z + width * 0.5,
-      p.v * z + height * 0.5,
+      p.u * z + halfWidth,
+      p.v * z + halfHeight,
       p.radius * z,
       p.color
     )
