@@ -3,7 +3,7 @@
 var xx = 1, xy = 0, xz = 0, xo = 0,
     yx = 0, yy = 1, yz = 0, yo = 0,
     zx = 0, zy = 0, zz = 1, zo = 0,
-    width, height, ctx, id, data
+    width, height, ctx, id, data, cache
 
 function initialize (canvas) {
   width = canvas.width
@@ -11,6 +11,7 @@ function initialize (canvas) {
   ctx = canvas.getContext ("2d")
   id = ctx.getImageData (0, 0, width, height)
   data = id.data
+  cache = []
 }
 
 function translate (x, y, z, block) {
@@ -56,20 +57,41 @@ function rotateY (angle, block) {
   zz = _zz
 }
 
+function pointSort (a, b) {
+  return a.w - b.w
+}
+
 function frame (block) {
-  var i = data.length
+  var i = data.length,
+      p, z
 
   while (i--) {
     data[i] = 0
     i -= 3
   }
 
+  cache.length = 0
+
   block ()
+
+  cache.sort (pointSort)
+
+  i = cache.length
+  while (i--) {
+    p = cache[i]
+    z = width / p.w
+    circle (
+      p.u * z + width * 0.5,
+      p.v * z + height * 0.5,
+      p.radius * z,
+      p.color
+    )
+  }
 
   ctx.putImageData (id, 0, 0)
 }
 
-function circle (x, y, r) {
+function circle (x, y, r, color) {
   var left = Math.floor (x - r),
       top = Math.floor (y - r),
       right = Math.floor (x + r + 1),
@@ -87,22 +109,29 @@ function circle (x, y, r) {
   if (bottom > height) bottom = height
   else if (bottom < 0) return
 
-  var i = (top * width + left) * 4 + 3,
-      step = (width + left - right) * 4
-
-  r *= r
+  var i = (top * width + left) * 4,
+      step = (width + left - right) * 4,
+      red = color >>> 16,
+      green = (color >>> 8) & 255,
+      blue = color & 255
 
   left -= x
   top -= y
   right -= x
   bottom -= y
+  r *= r
 
   for (y = top; y !== bottom; ++y, i += step) {
-    for (x = left; x !== right; ++x, i += 4) {
-      if (x * x + y * y > r)
+    for (x = left; x !== right; ++x) {
+      if (x * x + y * y > r) {
+        i += 4
         continue
+      }
 
-      data[i] = 255
+      data[i++] = red
+      data[i++] = green
+      data[i++] = blue
+      data[i++] = 255
     }
   }
 }
@@ -113,14 +142,10 @@ function plot (points) {
 
   while (i--) {
     p = points[i]
-    z = p.x * zx + p.y * zy + p.z * zz + zo
-    if (z <= 0) continue
-    z = width / z
-
-    circle (
-      (p.x * xx + p.y * xy + p.z * xz + xo) * z + width * 0.5,
-      (p.x * yx + p.y * yy + p.z * yz + yo) * z + height * 0.5,
-      p.radius * z
-    )
+    p.u = p.x * xx + p.y * xy + p.z * xz + xo
+    p.v = p.x * yx + p.y * yy + p.z * yz + yo
+    p.w = p.x * zx + p.y * zy + p.z * zz + zo
   }
+
+  Array.prototype.push.apply (cache, points)
 }

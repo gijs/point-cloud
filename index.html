@@ -14,8 +14,8 @@
        * point in the center of the planet, then we get occlusion! */
 
       var start = Date.now (),
-          stars = denseSphere (4096, 4),
-          planet = sparseSphere (4096, 1)
+          stars = denseSphere (4096, 4, 0xff0000),
+          planet = sparseSphere (4096, 1, 0x000000, 0xffffff)
 
       initialize (document.getElementById ("canvas"))
 
