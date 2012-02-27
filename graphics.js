@@ -56,40 +56,6 @@ function rotateY (angle, block) {
   zz = _zz
 }
 
-function scale (x, y, z, block) {
-  if (arguments.length === 2) {
-    block = y
-    y = x
-    z = x
-  }
-
-  xx *= x
-  yx *= x
-  zx *= x
-
-  xy *= y
-  yy *= y
-  zy *= y
-
-  xz *= z
-  yz *= z
-  zz *= z
-
-  block ()
-
-  xx /= x
-  yx /= x
-  zx /= x
-
-  xy /= y
-  yy /= y
-  zy /= y
-
-  xz /= z
-  yz /= z
-  zz /= z
-}
-
 function frame (block) {
   var i = data.length
 
