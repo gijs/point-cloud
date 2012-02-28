@@ -125,11 +125,12 @@ function circle (x, y, r, color) {
       blue = (color >>> 8) & 255,
       alpha = color & 255
 
-  left -= x
-  top -= y
-  right -= x
-  bottom -= y
   r *= r
+
+  left -= x
+  right -= x
+  top -= y
+  bottom -= y
 
   for (y = top; y !== bottom; ++y, i += step) {
     for (x = left; x !== right; ++x) {
