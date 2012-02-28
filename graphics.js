@@ -118,12 +118,8 @@ function circle (x, y, r, color) {
   top = top < 0 ? 0 : Math.floor (top)
   bottom = bottom > height ? height : Math.floor (bottom + 1)
 
-  var i = (top * width + left) * 4,
-      step = (width + left - right) * 4,
-      red = color >>> 24,
-      green = (color >>> 16) & 255,
-      blue = (color >>> 8) & 255,
-      alpha = color & 255
+  var i = (top * width + left) * 4 + 3,
+      step = (width + left - right) * 4
 
   r *= r
 
@@ -133,16 +129,11 @@ function circle (x, y, r, color) {
   bottom -= y
 
   for (y = top; y !== bottom; ++y, i += step) {
-    for (x = left; x !== right; ++x) {
-      if (x * x + y * y > r) {
-        i += 4
+    for (x = left; x !== right; ++x, i += 4) {
+      if (x * x + y * y > r)
         continue
-      }
 
-      data[i++] = red
-      data[i++] = green
-      data[i++] = blue
-      data[i++] = alpha
+      data[i] = color
     }
   }
 }
