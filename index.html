@@ -16,6 +16,9 @@
           moon = sparseSphere (512, 0.5, 0.015625, 63)
 
       initialize (document.getElementById ("canvas"))
+      add (stars)
+      add (planet)
+      add (moon)
 
       setInterval (function () {
         var now = Date.now (),

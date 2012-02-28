@@ -3,7 +3,7 @@
 var xx = 1, xy = 0, xz = 0, xo = 0,
     yx = 0, yy = 1, yz = 0, yo = 0,
     zx = 0, zy = 0, zz = 1, zo = 0,
-    width, halfWidth, height, halfHeight, ctx, id, data, cache
+    width, halfWidth, height, halfHeight, ctx, id, data, points
 
 function initialize (canvas) {
   width = canvas.width
@@ -13,7 +13,15 @@ function initialize (canvas) {
   ctx = canvas.getContext ("2d")
   id = ctx.getImageData (0, 0, width, height)
   data = id.data
-  cache = []
+  points = []
+}
+
+function clear () {
+  points.length = 0
+}
+
+function add (arr) {
+  Array.prototype.push.apply (points, arr)
 }
 
 function translate (x, y, z, block) {
@@ -72,15 +80,13 @@ function frame (block) {
     i -= 3
   }
 
-  cache.length = 0
-
   block ()
 
-  cache.sort (pointSort)
+  points.sort (pointSort)
 
-  i = cache.length
+  i = points.length
   while (i--) {
-    p = cache[i]
+    p = points[i]
 
     /* Don't draw anything behind the camera. (This is a break instead of a
      * continue, since the array is sorted. If we encounter one point behind
@@ -140,7 +146,7 @@ function circle (x, y, r, color) {
 
 function plot (points) {
   var i = points.length,
-      p, z
+      p
 
   while (i--) {
     p = points[i]
@@ -148,6 +154,4 @@ function plot (points) {
     p.v = p.x * yx + p.y * yy + p.z * yz + yo
     p.w = p.x * zx + p.y * zy + p.z * zz + zo
   }
-
-  Array.prototype.push.apply (cache, points)
 }
