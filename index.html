@@ -10,6 +10,12 @@
     <script type="text/javascript">
       "use strict"
 
+      /* FIXME: If we can *somehow* get back to using long array buffers for
+       * storing everything, then I imagine we can get performance way up. The
+       * main (only?) thing holding this back is the sort. This might not be so
+       * bad if we only do partial sorts and we favor algorithms that spend
+       * more time searching than swapping (selection sort?). */
+
       var start = Date.now (),
           stars = denseSphere (4096, 12, 0.015625, 127),
           planet = sparseSphere (2048, 1, 0.015625, 255),
