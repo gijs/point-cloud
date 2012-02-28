@@ -1,12 +1,11 @@
-function sparseSphere (i, r, s, c) {
-  var arr = denseSphere (i, r, s, c),
+function sparseSphere (i, r, s) {
+  var arr = denseSphere (i, r, s),
       p = arr[--i], k
 
   p.x = 0
   p.y = 0
   p.z = 0
-  p.radius = r
-  p.color = 0
+  p.radius = -r
 
   while (i--) {
     p = arr[i]
@@ -19,7 +18,7 @@ function sparseSphere (i, r, s, c) {
   return arr
 }
 
-function denseSphere (i, r, s, c) {
+function denseSphere (i, r, s) {
   r += r
 
   var arr = new Array (i),
@@ -39,8 +38,7 @@ function denseSphere (i, r, s, c) {
       u: 0,
       v: 0,
       w: 0,
-      radius: s,
-      color: c
+      radius: s
     }
   }
 

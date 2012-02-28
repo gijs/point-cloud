@@ -98,15 +98,20 @@ function frame (block) {
     circle (
       p.u * z + halfWidth,
       p.v * z + halfHeight,
-      p.radius * z,
-      p.color
+      p.radius * z
     )
   }
 
   ctx.putImageData (id, 0, 0)
 }
 
-function circle (x, y, r, color) {
+function circle (x, y, r) {
+  var color = 255
+  if (r < 0) {
+    r = -r
+    color = 0
+  }
+
   var left = x - r
   if (left >= width) return
 
