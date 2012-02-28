@@ -101,22 +101,22 @@ function frame (block) {
 }
 
 function circle (x, y, r, color) {
-  var left = Math.floor (x - r),
-      top = Math.floor (y - r),
-      right = Math.floor (x + r + 1),
-      bottom = Math.floor (y + r + 1)
+  var left = x - r
+  if (left >= width) return
 
-  if (left < 0) left = 0
-  else if (left >= width) return
+  var right = x + r
+  if (right <= 0) return
 
-  if (top < 0) top = 0
-  else if (top >= height) return
+  var top = y - r
+  if (top >= height) return
 
-  if (right > width) right = width
-  else if (right < 0) return
+  var bottom = y + r
+  if (bottom <= 0) return
 
-  if (bottom > height) bottom = height
-  else if (bottom < 0) return
+  left = left < 0 ? 0 : Math.floor (left)
+  right = right > width ? width : Math.floor (right + 1)
+  top = top < 0 ? 0 : Math.floor (top)
+  bottom = bottom > height ? height : Math.floor (bottom + 1)
 
   var i = (top * width + left) * 4,
       step = (width + left - right) * 4,
