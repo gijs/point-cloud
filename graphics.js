@@ -120,9 +120,10 @@ function circle (x, y, r, color) {
 
   var i = (top * width + left) * 4,
       step = (width + left - right) * 4,
-      red = color >>> 16,
-      green = (color >>> 8) & 255,
-      blue = color & 255
+      red = color >>> 24,
+      green = (color >>> 16) & 255,
+      blue = (color >>> 8) & 255,
+      alpha = color & 255
 
   left -= x
   top -= y
@@ -140,7 +141,7 @@ function circle (x, y, r, color) {
       data[i++] = red
       data[i++] = green
       data[i++] = blue
-      data[i++] = 255
+      data[i++] = alpha
     }
   }
 }
