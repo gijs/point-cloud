@@ -5,6 +5,7 @@
   <body>
     <canvas id="canvas" width="640" height="480"></canvas>
 
+    <script type="text/javascript" src="radix_sort.js"></script>
     <script type="text/javascript" src="graphics.js"></script>
     <script type="text/javascript" src="models.js"></script>
     <script type="text/javascript">
@@ -16,9 +17,9 @@
        * data to integer-based, then I imagine a radix sort would work. */
 
       var start = Date.now (),
-          stars = denseSphere (4096, 128, 0.25),
-          planet = sparseSphere (2048, 16, 0.25),
-          moon = sparseSphere (512, 8, 0.25)
+          stars = denseSphere (4096, 512, 1),
+          planet = sparseSphere (2048, 64, 1),
+          moon = sparseSphere (512, 32, 1)
 
       initialize (document.getElementById ("canvas"))
       add (stars)
@@ -30,12 +31,12 @@
             millis = now - start
 
         frame (function () {
-          translate (0, 0, 128, function () {
+          translate (0, 0, 512, function () {
             rotateY (millis * Math.PI * 2 / 600000, function () {
               plot (stars)
 
               rotateY (millis * Math.PI * 2 / -30000, function () {
-                translate (-48, 0, 0, function () {
+                translate (-192, 0, 0, function () {
                   plot (moon)
                 })
               })

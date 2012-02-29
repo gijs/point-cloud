@@ -82,7 +82,7 @@ function frame (block) {
 
   block ()
 
-  points.sort (pointSort)
+  radixSort (points)
 
   i = points.length
   while (i--) {

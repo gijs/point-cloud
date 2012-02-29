@@ -1,42 +1,56 @@
 <html>
   <head>
+    <style type="text/css">
+      canvas {
+        display: block;
+        margin: 1em 0;
+      }
+    </style>
   </head>
 
   <body>
     <canvas id="canvas" width="640" height="480"></canvas>
-    <canvas id="particles" width="128" height="128"></canvas>
+    <canvas id="world" width="256" height="256"></canvas>
+    <canvas id="screen" width="256" height="256"></canvas>
 
     <script type="text/javascript" src="radix_sort.js"></script>
 
     <script type="text/javascript">
-      var particles
+      var wctx, wid, world, sctx, sid, screen
 
-      function initialize (pcanvas) {
-        var pctx = pcanvas.getContext ("2d"),
-            pid = pctx.getImageData (0, 0, pcanvas.width, pcanvas.height)
+      function initialize (wcanvas, scanvas) {
+        wctx = wcanvas.getContext ("2d")
+        wid = wctx.getImageData (0, 0, wcanvas.width, wcanvas.height)
+        world = wid.data
 
-        particles = pid.data
+        sctx = scanvas.getContext ("2d")
+        sid = sctx.getImageData (0, 0, scanvas.width, scanvas.height)
+        screen = sid.data
 
-        var i = particles.length,
+        var i = world.length,
             k
 
         while (i) {
           k = Math.random () * 0x1000000
 
-          particles[--i] = 255
-          particles[--i] = k & 255
-          particles[--i] = (k >>> 8) & 255
-          particles[--i] = k >>> 16
+          world[--i] = 255
+          world[--i] = k & 255
+          world[--i] = (k >>> 8) & 255
+          world[--i] = k >>> 16
         }
 
-        radixSort (particles)
+        wctx.putImageData (wid, 0, 0)
 
-        pctx.putImageData (pid, 0, 0)
+        radixSort (world)
+        sctx.putImageData (wid, 0, 0)
       }
     </script>
 
     <script type="text/javascript">
-      initialize (document.getElementById ("particles"))
+      initialize (
+        document.getElementById ("world"),
+        document.getElementById ("screen")
+      )
     </script>
   </body>
 </html>
