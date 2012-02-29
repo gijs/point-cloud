@@ -1,28 +1,27 @@
-/* FIXME: tail call optimization */
 /* FIXME: we do a lot of swapping in the case of an already-sorted array. I
  * tested adding a check for that (`if (!(arr[j] & mask))`), but didn't see a
  * speedup. we *might* see a speedup when sorting a vertex buffer, though. */
 function _radixSort (arr, left, right, mask) {
-  var i = left,
-      j = right,
-      t
+  var i, j, t
 
-  while (i !== j)
-    if (arr[i] & mask) {
-      t = arr[--j]
-      arr[j] = arr[i]
-      arr[i] = t
-    }
+  while (mask) {
+    i = left
+    j = right
 
-    else
-      ++i
+    while (i !== j)
+      if (arr[i] & mask) {
+        t = arr[--j]
+        arr[j] = arr[i]
+        arr[i] = t
+      }
 
-  if (!mask)
-    return
+      else
+        ++i
 
-  mask >>>= 1
-  _radixSort (arr, left, i, mask)
-  _radixSort (arr, i, right, mask)
+    mask >>>= 1
+    _radixSort (arr, left, i, mask)
+    left = i
+  }
 }
 
 function radixSort (arr) {
