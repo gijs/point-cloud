@@ -35,7 +35,9 @@ function _radixSort (arr, left, right, mask) {
   }
 }
 
-/* Sorts an imageData object on it's red channel. */
+/* Sorts an imageData object on it's red channel. This sort is an in-place MSD
+ * Radix sort: O(N) in time and O(log N) in auxilliary space usage. It's very
+ * fast for large buffers. */
 function radixSort (arr) {
   _radixSort (arr, 0, arr.length, 128)
 }
