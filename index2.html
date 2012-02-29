@@ -1,0 +1,42 @@
+<html>
+  <head>
+  </head>
+
+  <body>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <canvas id="particles" width="128" height="128"></canvas>
+
+    <script type="text/javascript" src="radix_sort.js"></script>
+
+    <script type="text/javascript">
+      var particles
+
+      function initialize (pcanvas) {
+        var pctx = pcanvas.getContext ("2d"),
+            pid = pctx.getImageData (0, 0, pcanvas.width, pcanvas.height)
+
+        particles = pid.data
+
+        var i = particles.length,
+            k
+
+        while (i) {
+          k = Math.random () * 0x1000000
+
+          particles[--i] = 255
+          particles[--i] = k & 255
+          particles[--i] = (k >>> 8) & 255
+          particles[--i] = k >>> 16
+        }
+
+        radixSort (particles)
+
+        pctx.putImageData (pid, 0, 0)
+      }
+    </script>
+
+    <script type="text/javascript">
+      initialize (document.getElementById ("particles"))
+    </script>
+  </body>
+</html>
