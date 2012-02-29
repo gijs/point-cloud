@@ -47,3 +47,15 @@ console.log ("Radix Sort: %d", Date.now () - s)
 s = Date.now ()
 b.sort ()
 console.log ("Builtin Sort: %d", Date.now () - s)
+
+i = a.length - 1
+
+while (i--)
+  if (a[i] > a[i + 1])
+    break
+
+if (i === -1)
+  console.log ("RESULTS ARE VALID")
+
+else
+  console.log ("RESULTS ARE NOT VALID")
