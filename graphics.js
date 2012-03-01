@@ -74,14 +74,7 @@ function _clear () {
 
 /* FIXME: I like the accuracy of this method, but it's just too slow. Replace
  * with an integer circle algorithm! */
-function _circle (x, y, r) {
-  var color = 255
-
-  if (r < 0) {
-    r = -r
-    color = 0
-  }
-
+function _circle (x, y, r, color) {
   var left = x - r
   if (left >= width) return
 
@@ -99,8 +92,12 @@ function _circle (x, y, r) {
   top = top < 0 ? 0 : Math.floor (top)
   bottom = bottom > height ? height : Math.floor (bottom + 1)
 
-  var i = (top * width + left) * 4 + 3,
-      step = (width + left - right) * 4
+  var i = (top * width + left) * 4,
+      step = (width + left - right) * 4,
+      red = color >>> 24,
+      green = (color >>> 16) & 255,
+      blue = (color >>> 8) & 255,
+      alpha = color & 255
 
   r *= r
 
@@ -110,11 +107,16 @@ function _circle (x, y, r) {
   bottom -= y
 
   for (y = top; y !== bottom; ++y, i += step) {
-    for (x = left; x !== right; ++x, i += 4) {
-      if (x * x + y * y > r)
+    for (x = left; x !== right; ++x) {
+      if (x * x + y * y > r) {
+        i += 4
         continue
+      }
 
-      data[i] = color
+      data[i++] = red
+      data[i++] = green
+      data[i++] = blue
+      data[i++] = alpha
     }
   }
 }
@@ -136,7 +138,8 @@ function _draw () {
     _circle (
       p.u * z + halfWidth,
       p.v * z + halfHeight,
-      p.radius * z
+      p.radius * z,
+      p.color
     )
   }
 
