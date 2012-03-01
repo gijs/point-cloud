@@ -67,24 +67,19 @@ function rotateY (angle, block) {
   zz = _zz
 }
 
-function pointSort (a, b) {
-  return a.w - b.w
-}
-
-function frame (block) {
-  var i = data.length,
-      p, z
+function _clear () {
+  var i = data.length
 
   while (i--) {
     data[i] = 0
     i -= 3
   }
+}
 
-  block ()
+function _draw () {
+  var i = points.length,
+      p, z
 
-  radixSort (points)
-
-  i = points.length
   while (i--) {
     p = points[i]
 
@@ -103,6 +98,13 @@ function frame (block) {
   }
 
   ctx.putImageData (id, 0, 0)
+}
+
+function frame (block) {
+  _clear ()
+  block ()
+  radixSort (points)
+  _draw ()
 }
 
 function circle (x, y, r) {
