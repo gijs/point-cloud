@@ -12,9 +12,9 @@
       "use strict"
 
       var start = Date.now (),
-          stars = denseSphere (16384, 1024, 1, 0x6633ffff),
-          planet = sparseSphere (4096, 128, 1.5, 0x00cc00ff),
-          moon = sparseSphere (1024, 64, 1.5, 0xccccccff)
+          stars = denseSphere (16384, 128, 0.125, 0x6633ffff),
+          planet = sparseSphere (4096, 16, 0.1875, 0x00cc00ff),
+          moon = sparseSphere (1024, 8, 0.1875, 0xccccccff)
 
       initialize (document.getElementById ("canvas"))
       add (stars)
@@ -26,12 +26,12 @@
             millis = now - start
 
         frame (function () {
-          translate (0, 0, 1024, function () {
+          translate (0, 0, 128, function () {
             rotateY (millis * Math.PI * 2 / 600000, function () {
               plot (stars)
 
               rotateY (millis * Math.PI * 2 / -30000, function () {
-                translate (-384, 0, 0, function () {
+                translate (-48, 0, 0, function () {
                   plot (moon)
                 })
               })
