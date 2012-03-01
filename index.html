@@ -11,15 +11,10 @@
     <script type="text/javascript">
       "use strict"
 
-      /* FIXME: If we can *somehow* get back to using long array buffers for
-       * storing everything, then I imagine we can get performance way up. The
-       * main (only?) thing holding this back is the sort. If we can change the
-       * data to integer-based, then I imagine a radix sort would work. */
-
       var start = Date.now (),
-          stars = denseSphere (4096, 512, 1),
-          planet = sparseSphere (2048, 64, 1),
-          moon = sparseSphere (512, 32, 1)
+          stars = denseSphere (16384, 1024, 1),
+          planet = sparseSphere (4096, 128, 1.5),
+          moon = sparseSphere (1024, 64, 1.5)
 
       initialize (document.getElementById ("canvas"))
       add (stars)
@@ -31,12 +26,12 @@
             millis = now - start
 
         frame (function () {
-          translate (0, 0, 512, function () {
+          translate (0, 0, 1024, function () {
             rotateY (millis * Math.PI * 2 / 600000, function () {
               plot (stars)
 
               rotateY (millis * Math.PI * 2 / -30000, function () {
-                translate (-192, 0, 0, function () {
+                translate (-384, 0, 0, function () {
                   plot (moon)
                 })
               })

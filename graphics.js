@@ -16,10 +16,6 @@ function initialize (canvas) {
   points = []
 }
 
-function clear () {
-  points.length = 0
-}
-
 function add (arr) {
   Array.prototype.push.apply (points, arr)
 }

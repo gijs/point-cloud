@@ -18,9 +18,6 @@ function _mask (v) {
   return r
 }
 
-/* FIXME: we do a lot of swapping in the case of an already-sorted array. I
- * tested adding a check for that (`if (!(arr[j] & mask))`), but didn't see a
- * speedup. we *might* see a speedup when sorting a vertex buffer, though. */
 function _radixSort (arr, left, right, mask) {
   var i, j, t
 
