@@ -72,39 +72,11 @@ function _clear () {
   }
 }
 
-function _draw () {
-  var i = points.length,
-      p, z
-
-  while (i--) {
-    p = points[i]
-
-    /* Don't draw anything behind the camera. (This is a break instead of a
-     * continue, since the array is sorted. If we encounter one point behind
-     * the camera, then the rest of the array will be as well.) */
-    if (p.w <= 0)
-      break
-
-    z = width / p.w
-    circle (
-      p.u * z + halfWidth,
-      p.v * z + halfHeight,
-      p.radius * z
-    )
-  }
-
-  ctx.putImageData (id, 0, 0)
-}
-
-function frame (block) {
-  _clear ()
-  block ()
-  radixSort (points)
-  _draw ()
-}
-
-function circle (x, y, r) {
+/* FIXME: I like the accuracy of this method, but it's just too slow. Replace
+ * with an integer circle algorithm! */
+function _circle (x, y, r) {
   var color = 255
+
   if (r < 0) {
     r = -r
     color = 0
@@ -145,6 +117,37 @@ function circle (x, y, r) {
       data[i] = color
     }
   }
+}
+
+function _draw () {
+  var i = points.length,
+      p, z
+
+  while (i--) {
+    p = points[i]
+
+    /* Don't draw anything behind the camera. (This is a break instead of a
+     * continue, since the array is sorted. If we encounter one point behind
+     * the camera, then the rest of the array will be as well.) */
+    if (p.w <= 0)
+      break
+
+    z = width / p.w
+    _circle (
+      p.u * z + halfWidth,
+      p.v * z + halfHeight,
+      p.radius * z
+    )
+  }
+
+  ctx.putImageData (id, 0, 0)
+}
+
+function frame (block) {
+  _clear ()
+  block ()
+  radixSort (points)
+  _draw ()
 }
 
 function plot (points) {
