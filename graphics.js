@@ -75,22 +75,30 @@ function _clear () {
 /* FIXME: I like the accuracy of this method, but it's just too slow. Replace
  * with an integer circle algorithm! */
 function _circle (x, y, r, color) {
-  var left = x - r
-  if (left >= width) return
+  var left = (x - r) & 0x7fffffff,
+      right = (x + r + 1) & 0x7fffffff,
+      top = (y - r) & 0x7fffffff,
+      bottom = (y + r + 1) & 0x7fffffff
 
-  var right = x + r
-  if (right <= 0) return
+  if (left >= width) {
+    if (right > width)
+      return
 
-  var top = y - r
-  if (top >= height) return
+    left = 0
+  }
 
-  var bottom = y + r
-  if (bottom <= 0) return
+  else if (right > width)
+    right = width
 
-  left = left < 0 ? 0 : Math.floor (left)
-  right = right > width ? width : Math.floor (right + 1)
-  top = top < 0 ? 0 : Math.floor (top)
-  bottom = bottom > height ? height : Math.floor (bottom + 1)
+  if (top >= height) {
+    if (bottom > height)
+      return
+
+    top = 0
+  }
+
+  else if (bottom > height)
+    bottom = height
 
   var i = (top * width + left) * 4,
       step = (width + left - right) * 4,
