@@ -97,12 +97,14 @@ function _subpixelCircle (x, y, radius, fill) {
   bottom -= y
   radius *= radius
 
+  right -= left
+
   for (y = top; y !== bottom; ++y, i += step) {
     r = radius - y * y
+    u = left
+    x = right
 
-    for (x = left; x !== right; ++i, ++x) {
-      u = x
-
+    while (x--) {
       if (u * u <= r) data[i] = fill
       u += 0.3333333333333333
       ++i
@@ -113,6 +115,8 @@ function _subpixelCircle (x, y, radius, fill) {
 
       if (u * u <= r) data[i] = fill
       u += 0.3333333333333333
+      ++i
+
       ++i
     }
   }
