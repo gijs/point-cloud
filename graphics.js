@@ -71,7 +71,7 @@ function _clear () {
     data[i] = 255
 }
 
-function _subpixelCircle (x, y, radius, fill) {
+function _subpixelCircle (x, y, radius, color) {
   var left = Math.floor (x - radius),
       right = Math.floor (x + radius + 1),
       top = Math.floor (y - radius),
@@ -105,15 +105,15 @@ function _subpixelCircle (x, y, radius, fill) {
     x = right
 
     while (x--) {
-      if (u * u <= r) data[i] = fill
+      if (u * u <= r) data[i] = color
       u += 0.3333333333333333
       ++i
 
-      if (u * u <= r) data[i] = fill
+      if (u * u <= r) data[i] = color
       u += 0.3333333333333333
       ++i
 
-      if (u * u <= r) data[i] = fill
+      if (u * u <= r) data[i] = color
       u += 0.3333333333333333
       ++i
 
@@ -140,7 +140,7 @@ function _draw () {
       p.u * z + halfWidth,
       p.v * z + halfHeight,
       p.radius * z,
-      p.fill
+      p.color
     )
   }
 
