@@ -63,68 +63,57 @@ function rotateY (angle, block) {
   zz = _zz
 }
 
+
 function _clear () {
   var i = data.length
 
-  while (i--) {
-    data[i] = 0
-    i -= 3
-  }
+  while (i--)
+    data[i] = 255
 }
 
-/* FIXME: I like the accuracy of this method, but it's just too slow. Replace
- * with an integer circle algorithm! */
-function _circle (x, y, r, color) {
-  var left = (x - r) & 0x7fffffff,
-      right = (x + r + 1) & 0x7fffffff,
-      top = (y - r) & 0x7fffffff,
-      bottom = (y + r + 1) & 0x7fffffff
+function _subpixelCircle (x, y, radius, fill) {
+  var left = Math.floor (x - radius),
+      right = Math.floor (x + radius + 1),
+      top = Math.floor (y - radius),
+      bottom = Math.floor (y + radius + 1)
 
-  if (left >= width) {
-    if (right > width)
-      return
+  if (left >= width) return
+  if (right <= 0) return
+  if (top >= height) return
+  if (bottom <= 0) return
 
-    left = 0
-  }
+  if (left < 0) left = 0
+  if (right > width) right = width
+  if (top < 0) top = 0
+  if (bottom > height) bottom = height
 
-  else if (right > width)
-    right = width
-
-  if (top >= height) {
-    if (bottom > height)
-      return
-
-    top = 0
-  }
-
-  else if (bottom > height)
-    bottom = height
-
-  var i = (top * width + left) * 4,
+  var i = (left + top * width) * 4,
       step = (width + left - right) * 4,
-      red = color >>> 24,
-      green = (color >>> 16) & 255,
-      blue = (color >>> 8) & 255,
-      alpha = color & 255
-
-  r *= r
+      r, u
 
   left -= x
   right -= x
   top -= y
   bottom -= y
+  radius *= radius
 
   for (y = top; y !== bottom; ++y, i += step) {
-    for (x = left; x !== right; ++x) {
-      if (x * x + y * y > r) {
-        i += 4
-        continue
-      }
+    r = radius - y * y
 
-      data[i++] = red
-      data[i++] = green
-      data[i++] = blue
-      data[i++] = alpha
+    for (x = left; x !== right; ++i, ++x) {
+      u = x
+
+      if (u * u <= r) data[i] = fill
+      u += 0.3333333333333333
+      ++i
+
+      if (u * u <= r) data[i] = fill
+      u += 0.3333333333333333
+      ++i
+
+      if (u * u <= r) data[i] = fill
+      u += 0.3333333333333333
+      ++i
     }
   }
 }
@@ -143,11 +132,11 @@ function _draw () {
       break
 
     z = width / p.w
-    _circle (
+    _subpixelCircle (
       p.u * z + halfWidth,
       p.v * z + halfHeight,
       p.radius * z,
-      p.color
+      p.fill
     )
   }
 

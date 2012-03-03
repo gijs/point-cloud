@@ -12,9 +12,9 @@
       "use strict"
 
       var start = Date.now (),
-          stars = denseSphere (16384, 128, 0.125, 0x6633ffff),
-          planet = sparseSphere (4096, 16, 0.1875, 0x00cc00ff),
-          moon = sparseSphere (1024, 8, 0.1875, 0xccccccff)
+          stars = denseSphere (8192, 128, 0.125),
+          planet = sparseSphere (2048, 16, 0.1875),
+          moon = sparseSphere (512, 8, 0.1875)
 
       initialize (document.getElementById ("canvas"))
       add (stars)
