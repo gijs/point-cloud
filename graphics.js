@@ -67,8 +67,8 @@ function rotateY (angle, block) {
 function _clear () {
   var i = data.length
 
-  while (i--)
-    data[i] = 255
+  while (i)
+    data[--i] = 255
 }
 
 function _subpixelCircle (x, y, radius, color) {

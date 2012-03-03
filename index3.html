@@ -1,0 +1,76 @@
+<html>
+  <head>
+  </head>
+
+  <body>
+    <canvas id="canvas" width="256" height="256"></canvas>
+
+    <script type="text/javascript">
+      function clear (id) {
+        var data = id.data,
+            i = data.length
+
+        while (i) {
+          data[--i] = 255
+          data[--i] = 0
+          data[--i] = 0
+          data[--i] = 0
+        }
+      }
+
+      function flip (ctx, id) {
+        ctx.putImageData (id, 0, 0)
+      }
+
+      function circle (id, x, y, radius) {
+        var width = id.width,
+            height = id.height,
+            left = Math.floor (x - radius),
+            right = Math.floor (x + radius + 1),
+            top = Math.floor (y - radius),
+            bottom = Math.floor (y + radius + 1)
+
+        if (left >= width) return
+        if (right <= 0) return
+        if (top >= height) return
+        if (bottom <= 0) return
+
+        if (left < 0) left = 0
+        if (right > width) right = width
+        if (top < 0) top = 0
+        if (bottom > height) bottom = height
+
+        var data = id.data,
+            i = (left + top * width) * 4,
+            step = (width + left - right) * 4,
+            v, u, w
+
+        width = right - left
+        height = bottom - top
+        left -= x
+        top -= y
+
+        for (y = height, v = top; y--; i += step, ++v) {
+          for (x = width, u = left; x--; ++i, ++u) {
+            data[i++] = 255
+            data[i++] = 255
+            data[i++] = 255
+          }
+        }
+      }
+
+      var canvas = document.getElementById ("canvas"),
+          ctx = canvas.getContext ("2d"),
+          id = ctx.getImageData (0, 0, canvas.width, canvas.height),
+          start = Date.now ()
+
+      setInterval (function () {
+        var millis = Date.now () - start
+
+        clear (id)
+        circle (id, id.width * 0.5 + Math.sin (millis * 2 * Math.PI / 8000) * id.width * 0.125, id.height * 0.5, 32)
+        flip (ctx, id)
+      }, 0)
+    </script>
+  </body>
+</html>
